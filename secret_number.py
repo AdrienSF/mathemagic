@@ -56,3 +56,7 @@ if len(possible_secret_nums) == 1:
 #     if len(possible_secret_nums) == 1:
 #         print("your secret number is: " + str(int(possible_secret_nums.pop())))
 #         break
+
+# how many possibilities / how to reverse engineer to 100%
+# plug into force_matrix.py <<(later?make more complex force matrices to choose from)
+# push secret num to webpage <<(+scrambled force matrix)
