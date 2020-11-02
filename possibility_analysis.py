@@ -16,7 +16,7 @@ def crosscheck(check_dict: dict, to_check: set):
 
     return to_check
 
-mult_9 = [63, 81]
+mult_9 = [63, 8]
 pos_dict = {}
 pos_dict2 = {}
 
@@ -30,10 +30,22 @@ for secret in range(1, 100):
     # print(possibilities1)
     pos_dict[secret] = possibilities1
 
-    possibilities2 = get_possibilities(mult_9[1], secret)
-    possibilities2 = crosscheck(pos_dict2, possibilities2)
-    pos_dict2[secret] = possibilities2
+    # ===================
+    if len(possibilities1) > 1:
+        for c2 in range(2, 20):
+            pos3 = get_possibilities(c2*mult_9[0], secret)
+            intersec2 = [pos for pos in possibilities1 if pos in pos3]
+            if len(intersec2) < 2:
+                print(c2)
+            # print(str(c2) + ": " + str(intersec2))
+            # print(str(c2) + ": " + str(len(intersec2)))
+    # ===================
 
-    intersec = [pos for pos in possibilities1 if pos in possibilities2]
-    print(intersec)
-    print(len(intersec))
+
+    # possibilities2 = get_possibilities(mult_9[0]*mult_9[1], secret)
+    # possibilities2 = crosscheck(pos_dict2, possibilities2)
+    # pos_dict2[secret] = possibilities2
+
+    # intersec = [pos for pos in possibilities1 if pos in possibilities2]
+    # print(intersec)
+    # print(len(intersec))
