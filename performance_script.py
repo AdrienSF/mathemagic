@@ -4,6 +4,11 @@ import itertools
 # participant never chooses a zero as the digit of the product to keep secret.
 revealed_num = 63
 check_dict = {}
+choices = list(range(2, 20)) # this is our set of possible choices to give to the participant in the second round
+# We can set it to any list of intigers we want, but I've set it to be all ints from 2 to 20.
+# the script will remove any numbers in this list that lead to multiple
+# possibilities in the second round, and present us the revised list
+
 
 def get_digits(revealed_digits: str):
     last_digit = 9 - (sum([int(d) for d in revealed_digits]) % 9)
@@ -35,9 +40,9 @@ for secret in range(1, 100):
     possibilities1 = crosscheck(check_dict, possibilities1)
     check_dict[secret] = possibilities1
 
-print(check_dict)
+# print(check_dict)
 # first round -------------------------------
-revealed_digits = input("enter revealed digits: ")
+revealed_digits = input("enter revealed digits (no sapaces): ")
 digits = get_digits(revealed_digits)
 possibilities1 = get_possibilities(revealed_num, digits)
 possibilities1 = crosscheck(check_dict, possibilities1)
@@ -50,7 +55,6 @@ print()
 # second round ------------------------------
 # generate list of choices that lead to 1 possibility
 print("choices to present: ")
-choices = list(range(2, 20))
 for choice in choices:
     # print("if " + str(choice) + " is given as a choice")
     for pos in possibilities1:
@@ -67,8 +71,9 @@ for choice in choices:
 
 print()
 choice = int(input("enter participant's choice: "))
-revealed_digits = input("enter revealed digits: ")
+revealed_digits = input("enter revealed digits (no sapaces): ")
 digits = get_digits(revealed_digits)
 possibilities2 = get_possibilities(choice*revealed_num, digits)
 intersec = [pos for pos in possibilities1 if pos in possibilities2]
+print("The participant's secret number is:")
 print(intersec)
