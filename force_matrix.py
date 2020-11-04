@@ -67,6 +67,47 @@ def get_frac_seeds():
 def get_irrational_seeds():
     pass
 
+# shuffles the given matrix but keeps the indicated items unchanged
+def get_shuffled_matrix(matrix: object, fixed_entries: list):
+    n, m = np.shape(matrix)
+    # fixed_entry_dicts = [ {tuple(entry): matrix[entry[0], entry[1]} for entry in fixed_entries] ]
+    entries = list(np.matrix.flatten(matrix))
+    # convert the entries into indices corresponding to the flattened matrix
+    flattened_fixed_entries = [ n*entry[0] + entry[1] for entry in fixed_entries ]
+    # print(entries)
+    # reverse this so that we can remove items from entries while iterating over it
+    # (effectively itterating over entries backwards)
+    flattened_fixed_entries.reverse()
+    fixed_entry_dict = { fixed: entries.pop(fixed) for fixed in flattened_fixed_entries }
+    # print(fixed_entry_dict)
+    # print(entries)
+    # shuffle the entries now that the fixed entries are removed
+    random.shuffle(entries)
+    # return the fixed entries to their place
+    for i, val in reversed(fixed_entry_dict.items()):
+        entries.insert(i, val)
+
+    # print(entries)
+    # return the entries in matrix form
+    return np.reshape(entries, (n, m))
+
+# replaces a given percentage of items with random numbers, but keeps indicated
+# items unchanged
+def get_altered_matrix(matrix: object, fixed_entries: list, percent_change: int, bound: int):
+    n, m = np.shape(matrix)
+    quant_to_change = int((n*m-len(fixed_entries))*percent_change/100)
+    items_to_change = random.sample([(i,j) for i in range(n) for j in range(m) if (i,j) not in fixed_entries], quant_to_change)
+    # if the matrix only has positive entries, generate random positive integers only
+    if (matrix > 0).all():
+        interval = range(bound)
+    else:
+        interval = range(-1*bound, bound)
+        # else allow negative integers as well
+
+    for to_change in items_to_change:
+        matrix[to_change] = random.choice(interval)
+
+    return matrix
 
 # input: size n of the matrix, and f the number to force.
 try:
@@ -84,6 +125,9 @@ except Exception as e:
 
 
 seeds = get_int_seeds(n, f, 50)
-print(seeds)
+
+matrix = get_ext_matrix(seeds, n)
+print(matrix)
 print()
-print(get_ext_matrix(seeds, n))
+fixed = [(0,0), (1,1), (2,2)]
+print(get_altered_matrix(matrix, fixed, 25, 50))
