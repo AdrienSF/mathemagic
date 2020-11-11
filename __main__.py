@@ -1,6 +1,7 @@
 from secret_number import Performer
 from force_matrix import MatrixHandler
 import numpy as np
+import csv
 
 # the script assumes the performer chooses 63 as their number and that the
 # participant never chooses a zero as the digit of the product to keep secret.
@@ -42,23 +43,35 @@ if len(intersec) != 1:
     print('Failure: unable to narrow down secret number to a single possibility')
     exit(0)
 f = intersec[0]
-
+print(f)
 
 # matrix section ------------------------------
 handler = MatrixHandler()
 
-print("a bunch of randomly generated forcing matrices of various styles")
+# a bunch of randomly generated forcing matrices of various styles and dimensions
 positive_interior = []
 integer_interior = []
 positive_exterior = []
 integer_exterior = []
 
 for n in [4, 5, 6]:
-    positive_interior.append( handler.get_interior_matrix(handler.get_rand_positive_seeds(n, f), n) )
-    integer_interior.append( handler.get_interior_matrix(handler.get_rand_int_seeds(n, f, 10*f), n) )
+    positive_interior.append( handler.get_interior_matrix(handler.get_rand_positive_seeds(n-1, f), n) )
+    integer_interior.append( handler.get_interior_matrix(handler.get_rand_int_seeds(n-1, f, 10*f), n) )
     positive_exterior.append( handler.get_exterior_matrix(handler.get_rand_positive_seeds(n, f), n) )
     integer_exterior.append( handler.get_exterior_matrix(handler.get_rand_int_seeds(n, f, 10*f), n) )
 
 all_matrices = positive_interior + integer_interior + positive_exterior + integer_exterior
+
+print("printing the following to matrices.csv:")
 for M in all_matrices:
     print(M)
+
+with open('matrices.csv', 'w', newline='') as csvfile:
+    mwriter = csv.writer(csvfile, delimiter=',',
+                            quotechar='"', quoting=csv.QUOTE_MINIMAL)
+    
+    for i in range(len(all_matrices)):
+        mwriter.writerow(['Matrix #' + str(i)])
+        for row in all_matrices[i]:
+            mwriter.writerow(list(row))
+        mwriter.writerow([])

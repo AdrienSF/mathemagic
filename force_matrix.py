@@ -18,7 +18,7 @@ class MatrixHandler():
         # there could be up to 2n! ways of ordering this, so once again we will choose randomly
         random.shuffle(seeds)
 
-        return seeds
+        return np.array(seeds)
 
     def get_rand_int_seeds(self, n: int, f: int, bound: int):
         # split f into a sum of 2n integers.
@@ -40,15 +40,26 @@ class MatrixHandler():
 
     # returns a matrix that contains the seeds, and a 0. 
     # Where these seeds are positioned in the matrix is chosen randomly
+    # requires 2 fewer seeds than for exterior matrices
     def get_interior_matrix(self, seeds: list, n: int):
-        col_seeds = seeds[0:n]
-        row_seeds = seeds[n:2*n]
-        M = np.array([ [col_seed + row_seed for col_seed in col_seeds] for row_seed in row_seeds ])
-
+        if len(seeds) != 2*(n-1):
+            print("get_interior_matrix expected 2*(n-1) seeds but got: " + str(len(seeds)) + " with n=" + str(n))
+            raise TypeError()
+        n = n-1
+        col_seeds = list(seeds[0:n])
+        row_seeds = list(seeds[n:2*n])
+        
         seed_col = random.choice(range(n))
         seed_row = random.choice(range(n))
-        M[:, seed_col] -= col_seeds[seed_col]
-        M[seed_row, :] -= row_seeds[seed_row]
+        
+        col_seeds.insert(seed_row, 0)
+        row_seeds.insert(seed_col, 0)
+
+
+        M = np.array([ [col_seed + row_seed for col_seed in col_seeds] for row_seed in row_seeds ])
+
+        # M[:, seed_col] -= col_seeds[seed_col]
+        # M[seed_row, :] -= row_seeds[seed_row]
 
         return M
 
