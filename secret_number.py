@@ -8,8 +8,9 @@ class Performer():
 
     # given all but one non-zero digit, return find the last digit and return all the digits
     def get_digits(self, revealed_digits: str):
-        last_digit = 9 - (sum([int(d) for d in revealed_digits]) % 9)
-        digits = int("".join([str(d) for d in revealed_digits] + [str(last_digit)]))
+        revealed_digits = sorted([ int(d) for d in revealed_digits], reverse=True)
+        last_digit = 9 - (sum(revealed_digits) % 9)
+        digits = int("".join([str(last_digit)] + [str(d) for d in revealed_digits]))
 
         return digits
 

@@ -1,5 +1,6 @@
 import random
 import numpy as np
+import csv
 
 
 class MatrixHandler():
@@ -64,7 +65,7 @@ class MatrixHandler():
         return M
 
     # shuffles the given matrix but keeps the indicated items unchanged
-    def get_shuffled_matrix(matrix: object, fixed_entries: list):
+    def get_shuffled_matrix(self, matrix: np.array, fixed_entries: list):
         n, m = np.shape(matrix)
         # fixed_entry_dicts = [ {tuple(entry): matrix[entry[0], entry[1]} for entry in fixed_entries] ]
         entries = list(np.matrix.flatten(matrix))
@@ -89,7 +90,7 @@ class MatrixHandler():
 
     # replaces a given percentage of items with random numbers, but keeps indicated
     # items unchanged
-    def get_altered_matrix(matrix: object, fixed_entries: list, percent_change: int, bound: int):
+    def get_altered_matrix(self, matrix: np.array, fixed_entries: list, percent_change: int, bound: int):
         n, m = np.shape(matrix)
         quant_to_change = int((n*m-len(fixed_entries))*percent_change/100)
         items_to_change = random.sample([(i,j) for i in range(n) for j in range(m) if (i,j) not in fixed_entries], quant_to_change)
@@ -104,3 +105,20 @@ class MatrixHandler():
             matrix[to_change] = random.choice(interval)
 
         return matrix
+
+    def swap_matrix(self, filename: str, label: int, to_insert: np.array):
+        n, m = np.shape(to_insert)
+        
+        with open(filename) as inf:
+            rows = [ row for row in csv.reader(inf.readlines()) ]
+
+        label_position = rows.index(['Matrix #'+str(label)])
+        rows[label_position+1 : label_position+1 + n ] = list(to_insert)
+
+        print(rows)
+        with open(filename, 'w', newline='') as csvfile:
+            mwriter = csv.writer(csvfile, delimiter=',',
+                                    quotechar='"', quoting=csv.QUOTE_MINIMAL)
+            
+            mwriter.writerows(rows)
+            
