@@ -6,7 +6,7 @@ import csv
 # the script assumes the performer chooses 63 as their number and that the
 # participant never chooses a zero as the digit of the product to keep secret.
 revealed_num = 63
-choices = list(range(2, 20)) # this is our set of possible choices to give to the participant in the second round
+choices = list(range(200, 500)) # this is our set of possible choices to give to the participant in the second round
 # We can set it to any list of integers we want, but I've set it to be all ints from 2 to 20.
 # the script will remove any numbers in this list that lead to multiple
 # possibilities in the second round, and present us the revised list
@@ -18,7 +18,7 @@ revealed_digits = input("enter revealed digits (no sapaces): ")
 digits = performer.get_digits(revealed_digits)
 print("digits: " + str(digits))
 possibilities1 = performer.get_possibilities(digits)
-print('possibilities1: ' + str(possibilities1))
+# print('possibilities1: ' + str(possibilities1))
 possibilities1 = performer.crosscheck(possibilities1)
 print("possibilities: ")
 print(possibilities1)
@@ -35,7 +35,10 @@ else:
     choice = int(input("enter participant's choice: "))
     revealed_digits = input("enter revealed digits (no sapaces): ")
     digits = performer.get_digits(revealed_digits)
+    print("digits: " + str(digits))
     possibilities2 = performer.get_possibilities(digits, choice*revealed_num)
+    print("possibilities1: " + str(possibilities1))
+    print("possibilities2: " + str(possibilities2))
     intersec = [pos for pos in possibilities1 if pos in possibilities2]
     print("The participant's secret number is:")
     print(intersec)

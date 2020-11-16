@@ -95,7 +95,7 @@ class MatrixHandler():
         quant_to_change = int((n*m-len(fixed_entries))*percent_change/100)
         items_to_change = random.sample([(i,j) for i in range(n) for j in range(m) if (i,j) not in fixed_entries], quant_to_change)
         # if the matrix only has positive entries, generate random positive integers only
-        if (matrix > 0).all():
+        if (matrix >= 0).all():
             interval = range(bound)
         else:
             interval = range(-1*bound, bound)
@@ -115,7 +115,7 @@ class MatrixHandler():
         label_position = rows.index(['Matrix #'+str(label)])
         rows[label_position+1 : label_position+1 + n ] = list(to_insert)
 
-        print(rows)
+        # print(rows)
         with open(filename, 'w', newline='') as csvfile:
             mwriter = csv.writer(csvfile, delimiter=',',
                                     quotechar='"', quoting=csv.QUOTE_MINIMAL)

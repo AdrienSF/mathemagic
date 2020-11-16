@@ -10,6 +10,8 @@ class Performer():
     def get_digits(self, revealed_digits: str):
         revealed_digits = sorted([ int(d) for d in revealed_digits], reverse=True)
         last_digit = 9 - (sum(revealed_digits) % 9)
+        if last_digit == 9:
+            print('warning: hidden digit could be 0 OR 9. Continuing with the assumption that it is 9')
         digits = int("".join([str(last_digit)] + [str(d) for d in revealed_digits]))
 
         return digits
@@ -26,22 +28,22 @@ class Performer():
         return to_check
 
     # given the product digits in some order, returns possible secret numbers
-    def get_possibilities(self, digits: int, revealed_num=None):
+    def get_possibilities(self, digits: int, revealed_num=None, r=100):
         if not revealed_num:
             revealed_num = self.revealed_num
         digits = [d for d in str(digits)]
         permutations = list(set([int(num) for num in ["".join(permutation) for permutation in list(itertools.permutations(digits))]]))
-        possibilities1 = [int(num/revealed_num) for num in permutations if num % revealed_num == 0 and num/revealed_num < 100]
+        possibilities1 = [int(num/revealed_num) for num in permutations if num % revealed_num == 0 and num/revealed_num < r]
 
         return set(possibilities1)
 
     # this generates the dictionary used for crosscheck()
-    def get_check_dict(self, revealed_num=None):
+    def get_check_dict(self, revealed_num=None, r=100):
         check_dict = {}
         if not revealed_num:
             revealed_num = self.revealed_num
-        for secret in range(1, 100):
-            possibilities1 = self.get_possibilities(revealed_num*secret, revealed_num)
+        for secret in range(1, r):
+            possibilities1 = self.get_possibilities(revealed_num*secret, revealed_num, r)
             possibilities1 = self.crosscheck(possibilities1, check_dict)
             check_dict[secret] = possibilities1
 
