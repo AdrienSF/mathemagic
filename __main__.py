@@ -62,9 +62,13 @@ positive_exterior = []
 integer_exterior = []
 
 for n in [4, 5, 6]:
-    positive_interior.append( handler.get_interior_matrix(handler.get_rand_positive_seeds(n-1, f), n) )
+    if f > 8*n:
+        # only present positive force matrices if f is very large compared to n
+        # if f is not much greater than n, the resulting positive force matrix will look wierd: too many repeat seeds
+        positive_interior.append( handler.get_interior_matrix(handler.get_rand_positive_seeds(n-1, f), n) )
+        positive_exterior.append( handler.get_exterior_matrix(handler.get_rand_positive_seeds(n, f), n) )
+
     integer_interior.append( handler.get_interior_matrix(handler.get_rand_int_seeds(n-1, f, 10*f), n) )
-    positive_exterior.append( handler.get_exterior_matrix(handler.get_rand_positive_seeds(n, f), n) )
     integer_exterior.append( handler.get_exterior_matrix(handler.get_rand_int_seeds(n, f, 10*f), n) )
 
 all_matrices = positive_interior + integer_interior + positive_exterior + integer_exterior
