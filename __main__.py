@@ -1,12 +1,12 @@
 from secret_number import Performer
 from force_matrix import MatrixHandler
 import numpy as np
-import csv
+import json
 
 # the script assumes the performer chooses 63 as their number and that the
 # participant never chooses a zero as the digit of the product to keep secret.
 revealed_num = 63
-choices = list(range(200, 500)) # this is our set of possible choices to give to the participant in the second round
+choices = list(range(2, 20)) # this is our set of possible choices to give to the participant in the second round
 # We can set it to any list of integers we want, but I've set it to be all ints from 2 to 20.
 # the script will remove any numbers in this list that lead to multiple
 # possibilities in the second round, and present us the revised list
@@ -53,7 +53,7 @@ else:
 
 # matrix section ------------------------------
 handler = MatrixHandler()
-filename = 'mathemagic/matrices.csv'
+filename = 'matrices'
 
 # a bunch of randomly generated forcing matrices of various styles and dimensions
 positive_interior = []
@@ -73,26 +73,20 @@ for n in [4, 5, 6]:
 
 all_matrices = positive_interior + integer_interior + positive_exterior + integer_exterior
 
-print("printing the following to matrices.csv:")
+print("printing the following to " + filename + '.pdf : ')
 for M in all_matrices:
     print(M)
 
-with open(filename, 'w', newline='') as csvfile:
-    mwriter = csv.writer(csvfile, delimiter=',',
-                            quotechar='"', quoting=csv.QUOTE_MINIMAL)
-    
-    for i in range(len(all_matrices)):
-        mwriter.writerow(['Matrix #' + str(i)])
-        for row in all_matrices[i]:
-            mwriter.writerow(list(row))
-        mwriter.writerow([])
+# generate pdf
+handler.print_to_pdf(all_matrices, filename)
 
+# get participant choices
 matrix_num = int(input('enter chosen matrix: '))
 chosen_matrix = all_matrices[matrix_num]
 
-fixed_entries = []
-for i in range(len(chosen_matrix)):
-    fixed_entries.append( (i, int(input('enter column chosen for row ' + str(i) + ': '))) )
+fixed_entries = json.loads(input("enter list of fixed entries: "))
+
+
 print('original:')
 print(chosen_matrix)
 print()
@@ -104,5 +98,7 @@ print()
 print('scrambled matrix:')
 print(pseudo_matrix)
 
-input('press enter to swap matrices in matrices.csv')
-handler.swap_matrix(filename, matrix_num, pseudo_matrix)
+all_matrices[matrix_num] = pseudo_matrix
+
+input('press enter to swap matrices in ' + filename + '.pdf: ')
+handler.print_to_pdf(all_matrices, filename)

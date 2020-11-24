@@ -1,7 +1,6 @@
 import random
 import numpy as np
-import csv
-
+from pylatex import Document, Math, Matrix, Subsection, NoEscape
 
 class MatrixHandler():
     # def __init__(self, f: int):
@@ -106,19 +105,14 @@ class MatrixHandler():
 
         return matrix
 
-    def swap_matrix(self, filename: str, label: int, to_insert: np.array):
-        n, m = np.shape(to_insert)
+    def print_to_pdf(self, matrices: list, filename: str):
+        doc = Document()
+        doc.append(NoEscape('\setcounter{secnumdepth}{0}'))
+        for i in range(len(matrices)):
+            M = matrices[i]
+            with doc.create(Subsection('Matrix #' + str(i))):
+                doc.append(Math(data=[Matrix(M)]))
         
-        with open(filename) as inf:
-            rows = [ row for row in csv.reader(inf.readlines()) ]
+        doc.generate_pdf(filename, clean_tex=False)
 
-        label_position = rows.index(['Matrix #'+str(label)])
-        rows[label_position+1 : label_position+1 + n ] = list(to_insert)
-
-        # print(rows)
-        with open(filename, 'w', newline='') as csvfile:
-            mwriter = csv.writer(csvfile, delimiter=',',
-                                    quotechar='"', quoting=csv.QUOTE_MINIMAL)
-            
-            mwriter.writerows(rows)
             
