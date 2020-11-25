@@ -52,8 +52,7 @@ else:
 
 
 # matrix section ------------------------------
-handler = MatrixHandler()
-filename = 'matrices'
+handler = MatrixHandler(f)
 
 # a bunch of randomly generated forcing matrices of various styles and dimensions
 positive_interior = []
@@ -73,32 +72,36 @@ for n in [4, 5, 6]:
 
 all_matrices = positive_interior + integer_interior + positive_exterior + integer_exterior
 
-print("printing the following to " + filename + '.pdf : ')
+print("printing the following to " + handler.pdf_filename + '.pdf : ')
 for M in all_matrices:
     print(M)
 
 # generate pdf
-handler.print_to_pdf(all_matrices, filename)
+handler.print_to_pdf(all_matrices)
 
 # get participant choices
-matrix_num = int(input('enter chosen matrix: '))
+matrix_num = int(input('enter chosen matrix: ')) - 1
 chosen_matrix = all_matrices[matrix_num]
 
-fixed_entries = json.loads(input("enter list of fixed entries: "))
+again = True
+while again:
+    fixed_entries = handler.get_fixed_entries(chosen_matrix)
 
 
-print('original:')
-print(chosen_matrix)
-print()
-print("invariant entries:")
-print(fixed_entries)
-max_entry = np.amax(chosen_matrix)
-pseudo_matrix = handler.get_altered_matrix(handler.get_shuffled_matrix(chosen_matrix, fixed_entries), fixed_entries, 20, max_entry)
-print()
-print('scrambled matrix:')
-print(pseudo_matrix)
+    print('original:')
+    print(chosen_matrix)
+    print()
+    print("invariant entries:")
+    print([ (n[0]+1, n[1]+1) for n in fixed_entries ])
+    max_entry = np.amax(chosen_matrix)
+    pseudo_matrix = handler.get_altered_matrix(handler.get_shuffled_matrix(chosen_matrix, fixed_entries), fixed_entries, max_entry)
+    print()
+    print('scrambled matrix:')
+    print(pseudo_matrix)
+    print()
+    again = bool('n' in input('Correct? y/n: '))
 
 all_matrices[matrix_num] = pseudo_matrix
 
-input('press enter to swap matrices in ' + filename + '.pdf: ')
-handler.print_to_pdf(all_matrices, filename)
+input('press enter to swap matrices in ' + handler.pdf_filename + '.pdf: ')
+handler.print_to_pdf(all_matrices)
