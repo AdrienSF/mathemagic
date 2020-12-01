@@ -171,7 +171,7 @@ class MatrixHandler():
         matrix = [ [item for item in row] for row in matrix ]
         # mark fixed entries with *
         for entry in perm_fixed_entries:
-            matrix[entry[0]][entry[1]] = str(matrix[entry[0]][entry[1]]) + '*'
+            matrix[entry[0]][entry[1]] = '[' + str(matrix[entry[0]][entry[1]]) + ']'
 
         with open(filename, 'w', newline='') as csvfile:
             writer = csv.writer(csvfile, delimiter=',',
@@ -180,7 +180,7 @@ class MatrixHandler():
 
         print('generated \'select_entries.csv\'')
         print('add a \'*\' to the entries of \'select_entries.csv\' that should remain invariant')
-        print('some entries have already been marked as invariant')
+        print('some entries have already been marked as invariant with brackets: []')
         input('press enter to save invariant entries: ')
 
         fixed_entries = []
@@ -192,7 +192,7 @@ class MatrixHandler():
 
             for i in range(len(rows)):
                 for j in range(len(rows[0])):
-                    if '*' in rows[i][j]:
+                    if '*' in rows[i][j] or '[' in rows[i][j]:
                         fixed_entries.append((i, j))
         
         return list(set(fixed_entries))

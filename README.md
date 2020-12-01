@@ -2,15 +2,14 @@
 Using number theory and brute force computation, this project is used to aid a performer in giving a participant the illusion of choice.
 
 ## Installation
-This project is exclusively in Python3 and requires the numpy python library.
+From the "executables" folder of this repository, download the file cooresponding to your operating system.<br>
+The executable requires Latex to be installed on your system.
 
-## Performer’s Role
+## Performer Guide
 TODO
 
 ## Usage
-To execute, run:
-
-Python3 mathimagic
+To start the program, simply run the previously downloaded executable.
 
 ### First Round
 You will then be asked to input the participant’s revealed digits (no spaces). The program assumes that the performer chooses 63 as their number and that the participant never chooses a zero as the digit of the product to keep secret.
@@ -21,14 +20,7 @@ After pressing enter, the program will either find the participants number and j
 The program will display a list of choices to give to the participant, and ask for which one the participant chose. After pressing enter, the program will ask for the digits the participant revealed (again, enter the digits without spaces). Once this is entered, the secret number will be displayed and the program will proceed to the matrix section.
 
 ### Matrix Section
-In progress 
-
-(for now, a variety of matrices that force the secret number will saved to a file called matrices.csv)
-
-
-## Adjusting the Program
-For the second round, the choices displayed are taken from a list variable called “choices” that is set at the top of __main__. I've set it to be all ints from 2 to 20, but this can be set to any list of integers at your discretion. 
-
+The program generates a file named "matrices.pdf" containing a number of different forcing matrices, and asks you which one the participant chose. Once this is entered, "select_entries.csv" will be generated. Edit this spreadsheet by adding a '*' to any entries that should remain invariant. Some entries are invariant by default, and are marked with brackets: '[]'. When you are done marking invariant entries, save the spreadsheet and press enter in the terminal prompt. You will then be asked for comfirmation, and then asked if the participant's forcing matrix should be scrambled. Press enter at the command line prompt to scramble the forcing matrix, and the program exits shortly.
 
 ## Analysis
 In the first round, assuming the performer chooses 63, the program will narrow down the secret number to at most 4 possibilities. If another 2 digit multiple of 9 is chosen instead of 63, we will not be able to narrow down the secret number as much. This is why 63 is the preferred number for the performer to choose.
