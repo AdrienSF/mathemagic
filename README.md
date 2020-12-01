@@ -3,7 +3,7 @@ Using number theory and brute force computation, this project is used to aid a p
 
 ## Installation
 From the "executables" folder of this repository, download the file cooresponding to your operating system.<br>
-The executable requires Latex to be installed on your system.
+The executable requires [Latex](https://www.latex-project.org/get/) to be installed on your system.
 
 ## Performer Guide
 TODO
