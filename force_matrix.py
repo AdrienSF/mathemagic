@@ -112,9 +112,9 @@ class MatrixHandler():
         items_to_change = random.sample([(i,j) for i in range(n) for j in range(m) if (i,j) not in fixed_entries], quant_to_change)
         # if the matrix only has positive entries, generate random positive integers only
         if (matrix >= 0).all():
-            interval = range(bound)
+            interval = list(range(1, bound))
         else:
-            interval = range(-1*bound, bound)
+            interval = list(range(-1*bound, -1)) + list(range(1, bound))
             # else allow negative integers as well
 
         for to_change in items_to_change:

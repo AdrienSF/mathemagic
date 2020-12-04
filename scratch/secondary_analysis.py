@@ -1,15 +1,24 @@
 from secret_number import Performer
+import csv
 
 perf = Performer(63, list(range(2, 20)))
-mults = [ 9*i for i in range(2,112)]
+mults = [ 9*i for i in range(2,1112)]
+
+results = []
 
 for mult in mults:
-    # print("mult " + str(mult) + "==>" + str(max([ len(s) for s in perf.get_check_dict(mult, 1000).values() ])))
-    print("mult " + str(mult) + "==>" + str(sum([ 1 for s in perf.get_check_dict(mult, 1000).values() if len(s) == 1])))
+    vals = perf.get_check_dict(mult, 100).values()
+    first_tries = sum([ 1 for s in vals if len(s) == 1])
+    max_pos = max([ len(s) for s in vals ])
+    # print("mult " + str(mult) + " ==> " + str(first_tries) + ' | ' + str(max_pos))
+    results.append([mult, first_tries, max_pos])
 
-
-
-
+results.sort(reverse=True, key = lambda x: x[1])
+with open("results.csv", 'w', newline='') as csvfile:
+            writer = csv.writer(csvfile, delimiter=',',
+                            quotechar='"', quoting=csv.QUOTE_MINIMAL)
+            writer.writerow(['performer\'s num', 'first try successes', 'max round 1 possibilities'])
+            writer.writerows(results)
 
 
 '''

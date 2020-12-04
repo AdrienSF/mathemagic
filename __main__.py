@@ -3,9 +3,13 @@ from force_matrix import MatrixHandler
 import numpy as np
 import json
 
-# the script assumes the performer chooses 63 as their number and that the
-# participant never chooses a zero as the digit of the product to keep secret.
-revealed_num = 63
+# the script assumes that the participant never chooses a zero as the digit of the product to keep secret.
+
+# ask the performer to select their number from a list of good options
+top_choices = [63, 729, 5202]
+for i in  range(len(top_choices)):
+    print('choice ' + str(i+1) + ': ' + str(top_choices[i]))
+revealed_num = top_choices[int(input('enter choice: '))-1]
 choices = list(range(2, 20)) # this is our set of possible choices to give to the participant in the second round
 # We can set it to any list of integers we want, but I've set it to be all ints from 2 to 20.
 # the script will remove any numbers in this list that lead to multiple

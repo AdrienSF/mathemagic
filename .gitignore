@@ -3,3 +3,6 @@ env
 *.pdf
 *.tex
 *.csv
+dist
+build
+*.spec
