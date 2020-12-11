@@ -164,7 +164,16 @@ class MatrixHandler():
         perm_fixed_entries = [ tuple(ntry) for ntry in self.perm_fixed_entries ]
         if (matrix == 0).any():
             coord0 = np.where(matrix == 0)
-            perm_fixed_entries.append((int(coord0[0]), int(coord0[1])))
+            print(coord0)
+            try:
+                perm_fixed_entries.append((int(coord0[0]), int(coord0[1])))
+            except:
+                coord0 = np.transpose(coord0)
+                for coords in coord0:
+                    perm_fixed_entries.append((int(coords[0]), int(coords[1])))
+
+        
+
         perm_fixed_entries = list(set(perm_fixed_entries))
 
         # convert ndarray to vanilla python

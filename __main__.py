@@ -41,8 +41,6 @@ else:
     digits = performer.get_digits(revealed_digits)
     print("digits: " + str(digits))
     possibilities2 = performer.get_possibilities(digits, choice*revealed_num)
-    print("possibilities1: " + str(possibilities1))
-    print("possibilities2: " + str(possibilities2))
     intersec = [pos for pos in possibilities1 if pos in possibilities2]
     print("The participant's secret number is:")
     print(intersec)
