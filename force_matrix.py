@@ -79,7 +79,7 @@ class MatrixHandler():
         return M
 
     # shuffles the given matrix but keeps the indicated items unchanged
-    def get_shuffled_matrix(self, matrix: np.array, fixed_entries: list):
+    def get_shuffled_matrix(self, matrix: np.array, fixed_entries=[]):
         n, m = np.shape(matrix)
         # fixed_entry_dicts = [ {tuple(entry): matrix[entry[0], entry[1]} for entry in fixed_entries] ]
         entries = list(np.matrix.flatten(matrix))
@@ -103,7 +103,7 @@ class MatrixHandler():
 
     # replaces a given percentage of items with random numbers, but keeps indicated
     # items unchanged
-    def get_altered_matrix(self, matrix: np.array, fixed_entries: list, bound: int, percent_change=None):
+    def get_altered_matrix(self, matrix: np.array, bound: int, fixed_entries=[], percent_change=None):
         if percent_change == None:
             percent_change = self.percent_change
 

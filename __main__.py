@@ -96,13 +96,18 @@ while again:
     print("invariant entries:")
     print([ (n[0]+1, n[1]+1) for n in fixed_entries ])
     max_entry = np.amax(chosen_matrix)
-    pseudo_matrix = handler.get_altered_matrix(handler.get_shuffled_matrix(chosen_matrix, fixed_entries), fixed_entries, max_entry)
+    pseudo_matrix = handler.get_altered_matrix(handler.get_shuffled_matrix(chosen_matrix, fixed_entries=fixed_entries), max_entry, fixed_entries=fixed_entries)
     print()
     print('scrambled matrix:')
     print(pseudo_matrix)
     print()
     again = bool('n' in input('Correct? y/n: '))
 
+# shuffle all matrices
+for i in range(len(all_matrices)):
+    all_matrices[i] = handler.get_altered_matrix(handler.get_shuffled_matrix(all_matrices[i]), np.amax(all_matrices[i]))
+
+# replace the chosen matrix with a specially shuffled matrix
 all_matrices[matrix_num] = pseudo_matrix
 
 input('press enter to swap matrices in ' + handler.pdf_filename + '.pdf: ')
