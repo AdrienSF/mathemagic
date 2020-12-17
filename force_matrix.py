@@ -8,13 +8,15 @@ class MatrixHandler():
                 pdf_filename='matrices', 
                 csv_filename='select_entries.csv', 
                 percent_change=20,
-                perm_fixed_entries=[(0,0)]):
+                perm_fixed_entries=[(0,0)],
+                constrain_digits=True):
 
         self.f = f
         self.pdf_filename = pdf_filename
         self.csv_filename = csv_filename
         self.percent_change = percent_change
         self.perm_fixed_entries = perm_fixed_entries
+        self.constrain_digits = constrain_digits
  
 
     def get_rand_positive_seeds(self, n: int, f=None):
@@ -79,9 +81,20 @@ class MatrixHandler():
         return M
 
     # shuffles the given matrix but keeps the indicated items unchanged
-    def get_shuffled_matrix(self, matrix: np.array, fixed_entries=[]):
+    def get_shuffled_matrix(self, matrix: np.array, fixed_entries=[], constrain_digits=None):
+        if constrain_digits == None:
+            constrain_digits = self.constrain_digits
+        if constrain_digits:
+            for i in range(len(str(np.amax(matrix)))):
+                curr_fixed = [ (j, k) for j in range(len(matrix)) for k in range(len(matrix[0])) if not (abs(matrix[j][k]) >= pow(10, i) and abs(matrix[j][k]) < pow(10, (i+1)) )] + list(fixed_entries)
+                curr_fixed = list(set(curr_fixed))
+                matrix = self.shuffle_helper(matrix, curr_fixed)
+            return matrix
+        else:
+            return self.shuffle_helper(matrix, fixed_entries)
+
+    def shuffle_helper(self, matrix: np.array, fixed_entries=[]):
         n, m = np.shape(matrix)
-        # fixed_entry_dicts = [ {tuple(entry): matrix[entry[0], entry[1]} for entry in fixed_entries] ]
         entries = list(np.matrix.flatten(matrix))
         # convert the entries into indices corresponding to the flattened matrix
         flattened_fixed_entries = [ n*entry[0] + entry[1] for entry in fixed_entries ]
@@ -89,21 +102,20 @@ class MatrixHandler():
         # (effectively itterating over entries backwards)
         flattened_fixed_entries.sort(reverse=True)
         fixed_entry_dict = { fixed: entries.pop(fixed) for fixed in flattened_fixed_entries }
-        # print(fixed_entry_dict)
-        # print(entries)
         # shuffle the entries now that the fixed entries are removed
         random.shuffle(entries)
         # return the fixed entries to their place
         for i, val in reversed(fixed_entry_dict.items()):
             entries.insert(i, val)
 
-        # print(entries)
         # return the entries in matrix form
         return np.reshape(entries, (n, m))
 
     # replaces a given percentage of items with random numbers, but keeps indicated
     # items unchanged
-    def get_altered_matrix(self, matrix: np.array, bound: int, fixed_entries=[], percent_change=None):
+    def get_altered_matrix(self, matrix: np.array, bound: int, fixed_entries=[], percent_change=None, constrain_digits=None):
+        if constrain_digits == None:
+            constrain_digits = self.constrain_digits
         if percent_change == None:
             percent_change = self.percent_change
 
@@ -116,9 +128,16 @@ class MatrixHandler():
         else:
             interval = list(range(-1*bound, -1)) + list(range(1, bound))
             # else allow negative integers as well
+        
+        if constrain_digits:
+            for to_change in items_to_change:
+                digits = str(abs(matrix[to_change]))
+                matrix[to_change] = random.choice([1, -1]) * int(''.join([str(random.choice(list(range(1*int(digits.index(d) == 0), 10)))) for d in digits]))
+                                    # random sign               ranomize each digit from 0 through 9, except first digit never 0
+        else:
 
-        for to_change in items_to_change:
-            matrix[to_change] = random.choice(interval)
+            for to_change in items_to_change:
+                matrix[to_change] = random.choice(interval)
 
         return matrix
 
@@ -164,7 +183,6 @@ class MatrixHandler():
         perm_fixed_entries = [ tuple(ntry) for ntry in self.perm_fixed_entries ]
         if (matrix == 0).any():
             coord0 = np.where(matrix == 0)
-            print(coord0)
             try:
                 perm_fixed_entries.append((int(coord0[0]), int(coord0[1])))
             except:

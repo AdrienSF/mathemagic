@@ -6,7 +6,7 @@ import json
 # the script assumes that the participant never chooses a zero as the digit of the product to keep secret.
 
 # ask the performer to select their number from a list of good options
-top_choices = [63, 729, 5202]
+top_choices = [5202, 4041, 5553, 6282, 7308, 7839, 8631, 9747, 729, 63]
 for i in  range(len(top_choices)):
     print('choice ' + str(i+1) + ': ' + str(top_choices[i]))
 revealed_num = top_choices[int(input('enter choice: '))-1]
@@ -22,7 +22,6 @@ revealed_digits = input("enter revealed digits (no sapaces): ")
 digits = performer.get_digits(revealed_digits)
 print("digits: " + str(digits))
 possibilities1 = performer.get_possibilities(digits)
-# print('possibilities1: ' + str(possibilities1))
 possibilities1 = performer.crosscheck(possibilities1)
 print("possibilities: ")
 print(possibilities1)
@@ -42,12 +41,11 @@ else:
     print("digits: " + str(digits))
     possibilities2 = performer.get_possibilities(digits, choice*revealed_num)
     intersec = [pos for pos in possibilities1 if pos in possibilities2]
-    print("The participant's secret number is:")
-    print(intersec)
     # in case this code has a mistake, the program will tell you it failed
     if len(intersec) != 1:
         print('Failure: unable to narrow down secret number to a single possibility')
         exit(0)
+    print("The participant's secret number is:")
     f = intersec[0]
     print(f)
 
@@ -105,7 +103,7 @@ while again:
 
 # shuffle all matrices
 for i in range(len(all_matrices)):
-    all_matrices[i] = handler.get_altered_matrix(handler.get_shuffled_matrix(all_matrices[i]), np.amax(all_matrices[i]))
+    all_matrices[i] = handler.get_altered_matrix(handler.get_shuffled_matrix(all_matrices[i], constrain_digits=False), np.amax(all_matrices[i]), constrain_digits=False)
 
 # replace the chosen matrix with a specially shuffled matrix
 all_matrices[matrix_num] = pseudo_matrix
