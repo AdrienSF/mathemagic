@@ -5,6 +5,33 @@ import json
 
 # the script assumes that the participant never chooses a zero as the digit of the product to keep secret.
 
+# initialization -------------------------------
+# generates a pdf of feigned downloaded random matrices
+dummy = MatrixHandler()
+f = 73
+positive_interior = []
+integer_interior = []
+positive_exterior = []
+integer_exterior = []
+for n in [4, 5, 6]:
+    if f > 8*n:
+        # only present positive force matrices if f is very large compared to n
+        # if f is not much greater than n, the resulting positive force matrix will look wierd: too many repeat seeds
+        positive_interior.append( dummy.get_interior_matrix(dummy.get_rand_positive_seeds(n-1, f), n) )
+        positive_exterior.append( dummy.get_exterior_matrix(dummy.get_rand_positive_seeds(n, f), n) )
+
+    integer_interior.append( dummy.get_interior_matrix(dummy.get_rand_int_seeds(n-1, f, 10*f), n) )
+    integer_exterior.append( dummy.get_exterior_matrix(dummy.get_rand_int_seeds(n, f, 10*f), n) )
+
+all_matrices = positive_interior + integer_interior + positive_exterior + integer_exterior
+
+# shuffle all matrices
+for i in range(len(all_matrices)):
+    all_matrices[i] = dummy.get_altered_matrix(dummy.get_shuffled_matrix(all_matrices[i], constrain_digits=False), np.amax(all_matrices[i]), constrain_digits=False)
+dummy.print_to_pdf(all_matrices)
+
+
+
 # ask the performer to select their number from a list of good options
 top_choices = [5202, 4041, 5553, 6282, 7308, 7839, 8631, 9747, 729, 63]
 for i in  range(len(top_choices)):

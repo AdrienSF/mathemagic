@@ -1,7 +1,8 @@
 import random
 import numpy as np
-from pylatex import Document, Math, Matrix, Subsection, NoEscape, Tabular
+from pylatex import Document, Math, Matrix, Subsection, NoEscape, Tabular, Section
 import csv
+from datetime import date
 
 class MatrixHandler():
     def __init__(self, f=None, 
@@ -150,6 +151,12 @@ class MatrixHandler():
         doc = Document()
         doc.append(NoEscape('\setcounter{secnumdepth}{0}'))
         doc.append(NoEscape('\pagenumbering{gobble}'))
+
+        today = date.today()
+        with doc.create(Section('Downloaded ' + str(today))):
+            doc.append('https://onlinemathtools.com/generate-random-matrix')
+            doc.append(NoEscape("\\newpage"))
+            
         for i in range(len(matrices)):
             M = matrices[i]
             # set the specs for the table that holds the matrix entries
