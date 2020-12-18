@@ -2,6 +2,7 @@ from secret_number import Performer
 from force_matrix import MatrixHandler
 import numpy as np
 import json
+import webbrowser
 
 # the script assumes that the participant never chooses a zero as the digit of the product to keep secret.
 
@@ -30,10 +31,11 @@ for i in range(len(all_matrices)):
     all_matrices[i] = dummy.get_altered_matrix(dummy.get_shuffled_matrix(all_matrices[i], constrain_digits=False), np.amax(all_matrices[i]), constrain_digits=False)
 dummy.print_to_pdf(all_matrices)
 
-
+# performer input -------------------------------
+email_address = input('enter participant email address: ')
 
 # ask the performer to select their number from a list of good options
-top_choices = [5202, 4041, 5553, 6282, 7308, 7839, 8631, 9747, 729, 63]
+top_choices = [10161, 15678, 16101, 16839, 5202, 4041, 729, 63]
 for i in  range(len(top_choices)):
     print('choice ' + str(i+1) + ': ' + str(top_choices[i]))
 revealed_num = top_choices[int(input('enter choice: '))-1]
@@ -137,3 +139,8 @@ all_matrices[matrix_num] = pseudo_matrix
 
 input('press enter to swap matrices in ' + handler.pdf_filename + '.pdf: ')
 handler.print_to_pdf(all_matrices)
+
+
+
+# generate email
+webbrowser.open('mailto:' + email_address + '?subject=Attached is the document with the numbers used')
