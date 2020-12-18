@@ -125,14 +125,16 @@ class MatrixHandler():
         # if the matrix only has positive entries, generate random positive integers only
         if (matrix >= 0).all():
             interval = list(range(1, bound))
+            pos_signs = [1]
         else:
             interval = list(range(-1*bound, -1)) + list(range(1, bound))
+            pos_signs = [1, -1]
             # else allow negative integers as well
         
         if constrain_digits:
             for to_change in items_to_change:
                 digits = str(abs(matrix[to_change]))
-                matrix[to_change] = random.choice([1, -1]) * int(''.join([str(random.choice(list(range(1*int(digits.index(d) == 0), 10)))) for d in digits]))
+                matrix[to_change] = random.choice(pos_signs) * int(''.join([str(random.choice(list(range(1*int(digits.index(d) == 0), 10)))) for d in digits]))
                                     # random sign               ranomize each digit from 0 through 9, except first digit never 0
         else:
 
