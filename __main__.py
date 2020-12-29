@@ -3,6 +3,7 @@ from force_matrix import MatrixHandler
 import numpy as np
 import json
 import webbrowser
+from color_matrix import ColorMatrix
 
 # the script assumes that the participant never chooses a zero as the digit of the product to keep secret.
 
@@ -26,10 +27,14 @@ for n in [4, 5, 6]:
 
 all_matrices = positive_interior + integer_interior + positive_exterior + integer_exterior
 
+# generate coresponding color matrices
+color_handler = ColorMatrix()
+color_matrices = [ color_handler.get_color_matrix(len(M), len(M[0])) for M in all_matrices ]
+
 # shuffle all matrices
 for i in range(len(all_matrices)):
     all_matrices[i] = dummy.get_altered_matrix(dummy.get_shuffled_matrix(all_matrices[i], constrain_digits=False), np.amax(all_matrices[i]), constrain_digits=False)
-dummy.print_to_pdf(all_matrices)
+dummy.print_to_pdf(all_matrices, color_matrices)
 
 # performer input -------------------------------
 email_address = input('enter participant email address: ')
@@ -105,8 +110,9 @@ print("printing the following to " + handler.pdf_filename + '.pdf : ')
 for M in all_matrices:
     print(M)
 
+
 # generate pdf
-handler.print_to_pdf(all_matrices)
+handler.print_to_pdf(all_matrices, color_matrices)
 
 # get participant choices
 matrix_num = int(input('enter chosen matrix: ')) - 1
@@ -136,9 +142,16 @@ for i in range(len(all_matrices)):
 
 # replace the chosen matrix with a specially shuffled matrix
 all_matrices[matrix_num] = pseudo_matrix
+# replace it's cooresponing color matrix with a octored one
+coord_dict = {(0,1): "white",
+                (0,0): "black",
+                # (0,2): "black",
+                # (0,3): "black",
+                }
+color_matrices[matrix_num] = color_handler.get_doctored_matrix(color_matrices[matrix_num], coord_dict)
 
 input('press enter to swap matrices in ' + handler.pdf_filename + '.pdf: ')
-handler.print_to_pdf(all_matrices)
+handler.print_to_pdf(all_matrices, color_matrices)
 
 
 

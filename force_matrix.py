@@ -3,6 +3,7 @@ import numpy as np
 from pylatex import Document, Math, Matrix, Subsection, NoEscape, Tabular, Section, Package
 import csv
 from datetime import date
+from color_matrix import ColorMatrix
 
 class MatrixHandler():
     def __init__(self, f=None, 
@@ -144,7 +145,7 @@ class MatrixHandler():
 
         return matrix
 
-    def print_to_pdf(self, matrices: list, filename=None, add_borders=False):
+    def print_to_pdf(self, matrices: list, color_matrices: list, filename=None, add_borders=False):
         if filename == None:
             filename = self.pdf_filename
 
@@ -152,7 +153,12 @@ class MatrixHandler():
         doc.packages.append(Package('xcolor', options='table'))
         doc.append(NoEscape('\setcounter{secnumdepth}{0}'))
         doc.append(NoEscape('\pagenumbering{gobble}'))
-        doc.append(NoEscape('\definecolor{myOrange}{rgb}{1,0.5,0}'))
+        # define colors from color dict
+        colors = ColorMatrix()
+        for color in colors.strDict:
+            doc.append(NoEscape(colors.strDict[color]))
+            
+        
 
 
         today = date.today()
@@ -162,6 +168,7 @@ class MatrixHandler():
             
         for i in range(len(matrices)):
             M = matrices[i]
+            C = color_matrices[i]
             # set the specs for the table that holds the matrix entries
             if add_borders:
                 table_spec = "|" + "|".join(['c' for t in M[0]]) + "|"
@@ -187,11 +194,11 @@ class MatrixHandler():
 
                 doc.append(NoEscape("\hfill"))
                 ############ create color table
-                with doc.create(Tabular("".join(['c' for t in M[0]]))) as table:
+                with doc.create(Tabular("".join(['c' for t in C[0]]))) as table:
                     # if add_borders:
                     #     table.add_hline()
-                    for row in M:
-                        table.add_row([ NoEscape('\cellcolor{myOrange}') for t in row])
+                    for row in C:
+                        table.add_row([ NoEscape('\cellcolor{'+ color + '}') for color in row])
                         # if add_borders:
                         #     table.add_hline()
 
