@@ -1,6 +1,6 @@
 import random
 import numpy as np
-from pylatex import Document, Math, Matrix, Subsection, NoEscape, Tabular, Section
+from pylatex import Document, Math, Matrix, Subsection, NoEscape, Tabular, Section, Package
 import csv
 from datetime import date
 
@@ -144,16 +144,19 @@ class MatrixHandler():
 
         return matrix
 
-    def print_to_pdf(self, matrices: list, filename=None, add_borders=True):
+    def print_to_pdf(self, matrices: list, filename=None, add_borders=False):
         if filename == None:
             filename = self.pdf_filename
 
         doc = Document()
+        doc.packages.append(Package('xcolor', options='table'))
         doc.append(NoEscape('\setcounter{secnumdepth}{0}'))
         doc.append(NoEscape('\pagenumbering{gobble}'))
+        doc.append(NoEscape('\definecolor{myOrange}{rgb}{1,0.5,0}'))
+
 
         today = date.today()
-        with doc.create(Section('Downloaded ' + str(today))):
+        with doc.create(Section('Randomly generated numbers collected on ' + str(today) + ' and adapted from:')):
             doc.append('https://onlinemathtools.com/generate-random-matrix')
             doc.append(NoEscape("\\newpage"))
             
@@ -165,8 +168,8 @@ class MatrixHandler():
             else:
                 table_spec = "".join(['c' for t in M[0]])
             
-
             with doc.create(Subsection('Option #' + str(i+1))):
+                ############ create number table
                 with doc.create(Tabular(table_spec)) as table:
                     if add_borders:
                         table.add_hline()
@@ -176,12 +179,26 @@ class MatrixHandler():
                             row = [ '+' + str(num) if num >= 0 else '–' + str(-1*num) for num in row ]
                             if "+0" in row:
                                 row[row.index("+0")] = '0'
+                                # NoEscape('\cellcolor{green}0')
 
                         table.add_row(row)
                         if add_borders:
                             table.add_hline()
+
+                doc.append(NoEscape("\hfill"))
+                ############ create color table
+                with doc.create(Tabular("".join(['c' for t in M[0]]))) as table:
+                    # if add_borders:
+                    #     table.add_hline()
+                    for row in M:
+                        table.add_row([ NoEscape('\cellcolor{myOrange}') for t in row])
+                        # if add_borders:
+                        #     table.add_hline()
+
+
         
         doc.generate_pdf(filename, clean_tex=False)
+
 
 
     def get_fixed_entries(self, matrix: np.array, filename=None):

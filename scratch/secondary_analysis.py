@@ -2,25 +2,27 @@ from secret_number import Performer
 import csv
 
 perf = Performer(63, list(range(2, 20)))
-mults = [ 9*i for i in range(2,1112)]
+mults = [ 9*i for i in range(2,11112)]
 
 results = []
 
 for mult in mults:
+    print('analysed: ' + str(len(results)) + '/' + str(len(mults)))
     vals = perf.get_check_dict(mult, 100).values()
     first_tries = sum([ 1 for s in vals if len(s) == 1])
     max_pos = max([ len(s) for s in vals ])
     # print("mult " + str(mult) + " ==> " + str(first_tries) + ' | ' + str(max_pos))
     results.append([mult, first_tries, max_pos])
-
+print('sorting...')
 results.sort(reverse=True, key = lambda x: x[1])
+print('writing to results.csv')
 with open("results.csv", 'w', newline='') as csvfile:
             writer = csv.writer(csvfile, delimiter=',',
                             quotechar='"', quoting=csv.QUOTE_MINIMAL)
             writer.writerow(['performer\'s num', 'first try successes', 'max round 1 possibilities'])
             writer.writerows(results)
 
-
+print('done.')
 '''
 conclusion to second analyis:
 letting the participant choose up to 1000 is highly unhelpful, but assuming the secret num is less than 100,

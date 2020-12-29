@@ -143,4 +143,6 @@ handler.print_to_pdf(all_matrices)
 
 
 # generate email
-webbrowser.open('mailto:' + email_address + '?subject=Here\'s the pdf with the random numbers')
+link = 'mailto:' + email_address + '?subject=Here\'s the pdf with the random numbers'
+print(link)
+# webbrowser.open(link)
