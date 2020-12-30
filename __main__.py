@@ -40,7 +40,9 @@ dummy.print_to_pdf(all_matrices, color_matrices)
 email_address = input('enter participant email address: ')
 
 # ask the performer to select their number from a list of good options
-top_choices = [10161, 15678, 16101, 16839, 5202, 4041, 729, 63]
+top_choices = [10161, 15678, 16101, 16839, 17172, 18531, 19611, 20205, 5202, 4041, 729, 63]
+
+
 for i in  range(len(top_choices)):
     print('choice ' + str(i+1) + ': ' + str(top_choices[i]))
 revealed_num = top_choices[int(input('enter choice: '))-1]
@@ -118,23 +120,30 @@ handler.print_to_pdf(all_matrices, color_matrices)
 matrix_num = int(input('enter chosen matrix: ')) - 1
 chosen_matrix = all_matrices[matrix_num]
 
-again = True
-while again:
-    fixed_entries = handler.get_fixed_entries(chosen_matrix)
+
+# ###### too verbose:
+# again = True
+# while again:
+#     fixed_entries, coord_dict = handler.get_fixed_entries(chosen_matrix)
 
 
-    print('original:')
-    print(chosen_matrix)
-    print()
-    print("invariant entries:")
-    print([ (n[0]+1, n[1]+1) for n in fixed_entries ])
-    max_entry = np.amax(chosen_matrix)
-    pseudo_matrix = handler.get_altered_matrix(handler.get_shuffled_matrix(chosen_matrix, fixed_entries=fixed_entries), max_entry, fixed_entries=fixed_entries)
-    print()
-    print('scrambled matrix:')
-    print(pseudo_matrix)
-    print()
-    again = bool('n' in input('Correct? y/n: '))
+#     print('original:')
+#     print(chosen_matrix)
+#     print()
+#     print("invariant entries:")
+#     print([ (n[0]+1, n[1]+1) for n in fixed_entries ])
+#     max_entry = np.amax(chosen_matrix)
+#     pseudo_matrix = handler.get_altered_matrix(handler.get_shuffled_matrix(chosen_matrix, fixed_entries=fixed_entries), max_entry, fixed_entries=fixed_entries)
+#     print()
+#     print('scrambled matrix:')
+#     print(pseudo_matrix)
+#     print()
+#     again = bool('n' in input('Correct? y/n: '))
+
+fixed_entries, coord_dict = handler.get_fixed_entries(chosen_matrix)
+max_entry = np.amax(chosen_matrix)
+pseudo_matrix = handler.get_altered_matrix(handler.get_shuffled_matrix(chosen_matrix, fixed_entries=fixed_entries), max_entry, fixed_entries=fixed_entries)
+
 
 # shuffle all matrices
 for i in range(len(all_matrices)):
@@ -143,11 +152,6 @@ for i in range(len(all_matrices)):
 # replace the chosen matrix with a specially shuffled matrix
 all_matrices[matrix_num] = pseudo_matrix
 # replace it's cooresponing color matrix with a octored one
-coord_dict = {(0,1): "white",
-                (0,0): "black",
-                # (0,2): "black",
-                # (0,3): "black",
-                }
 color_matrices[matrix_num] = color_handler.get_doctored_matrix(color_matrices[matrix_num], coord_dict)
 
 input('press enter to swap matrices in ' + handler.pdf_filename + '.pdf: ')

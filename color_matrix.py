@@ -4,8 +4,8 @@ from pylatex import NoEscape
 
 class ColorMatrix(object):
     def __init__(self):
-        self.rgbDict = {'white': [0,0,0],
-                    'black': [1,1,1],
+        self.rgbDict = {'white': [1,1,1],
+                    'black': [0,0,0],
                     'red': [255/255, 46/255, 21/255],
                     'yellow': [254/255, 215/255, 43/255],
                     'turquoise': [122/255, 187/255, 129/255],

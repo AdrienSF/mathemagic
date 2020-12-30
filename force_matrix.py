@@ -237,23 +237,51 @@ class MatrixHandler():
             writer = csv.writer(csvfile, delimiter=',',
                             quotechar='"', quoting=csv.QUOTE_MINIMAL)
             writer.writerows(matrix)
+            # add color choice columns
+            color_handler = ColorMatrix()
+            color_choices = np.transpose(np.array([ list(color_handler.strDict.keys()) for i in matrix ]))
+            # convert ndarray to vanilla python
+            color_choices = [ [item for item in row] for row in color_choices ]
+            writer.writerows(color_choices)
+
 
         print('generated \'select_entries.csv\'')
-        print('add a \'*\' to the entries of \'select_entries.csv\' that should remain invariant')
+        print('add a \'*\' to the number entries of \'select_entries.csv\' that should remain invariant')
         print('some entries have already been marked as invariant with brackets: []')
-        input('press enter to save invariant entries: ')
+        print('add a \'*\' to the color entries to select the color of the invariant entry of a given column')
+        input('press enter to save invariant entries and their colors: ')
 
         fixed_entries = []
+        chosen_entries = []
+        chosen_entries = []
         rows = []
         with open(filename, newline='') as csvfile:
             reader = csv.reader(csvfile, delimiter=',', quotechar='"')
             for row in reader:
                 rows.append(row)
 
-            for i in range(len(rows)):
+            # collect selected number entries
+            for i in range(len(rows[0])):
                 for j in range(len(rows[0])):
+                    if '*' in rows[i][j]:
+                        chosen_entries.append((i, j))
                     if '*' in rows[i][j] or '[' in rows[i][j]:
                         fixed_entries.append((i, j))
+            # collect selected color entries
+            coord_dict = {}
+            for i in range(len(rows[0]), len(rows)):
+                for j in range(len(rows[0])):
+                    if '*' in rows[i][j]:
+                        color = list(color_handler.strDict.keys())[i-len(rows[0])]
+                        matching_coords = [ coords for coords in chosen_entries if coords[1] == j ]
+                        if len(matching_coords) > 1:
+                            print("Warning: expected one item but found: " + len(coords))
+                            print("Using first item.")
+                        coords = matching_coords.pop()
+
+                        coord_dict[coords] = color
+
+
         
-        return list(set(fixed_entries))
+        return list(set(fixed_entries)), coord_dict
             
