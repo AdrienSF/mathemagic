@@ -22,13 +22,22 @@ class MatrixHandler():
  
 
     def get_rand_positive_seeds(self, n: int, f=None):
+        total_samples = 2*n-1
         if f == None:
             f = self.f
+        if n == 1:
+            return [f]
+        if f-1 < total_samples:
+            zeros = [ 0 for i in range(total_samples - f + 1) ]
+        else:
+            zeros = []
+
+            # 2*n-1 - f
         # split f into a sum of 2n integers.
         # there are f-1 choose 2n-1 ways to do this, so we will choose one randomly.
 
         # get random ints that split f into 2n segments
-        split_points = sorted([0] + list(random.sample(range(1, f), 2*n-1)) + [f])
+        split_points = sorted([0] + list(random.sample(zeros + list(range(1, f)), total_samples)) + [f])
 
         # convert into a list of 2n ints that sum up to f
         seeds = [ split_points[i+1] - split_points[i] for i in range(2*n) ]

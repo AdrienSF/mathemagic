@@ -103,6 +103,7 @@ for n in [4, 5, 6]:
         positive_interior.append( handler.get_interior_matrix(handler.get_rand_positive_seeds(n-1, f), n) )
         positive_exterior.append( handler.get_exterior_matrix(handler.get_rand_positive_seeds(n, f), n) )
 
+    # bound = min([])
     integer_interior.append( handler.get_interior_matrix(handler.get_rand_int_seeds(n-1, f, 10*f), n) )
     integer_exterior.append( handler.get_exterior_matrix(handler.get_rand_int_seeds(n, f, 10*f), n) )
 
