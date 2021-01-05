@@ -116,7 +116,7 @@ class MatrixHandler():
         # shuffle the entries now that the fixed entries are removed
         random.shuffle(entries)
         # return the fixed entries to their place
-        for i, val in reversed(fixed_entry_dict.items()):
+        for i, val in reversed(list(fixed_entry_dict.items())):
             entries.insert(i, val)
 
         # return the entries in matrix form
