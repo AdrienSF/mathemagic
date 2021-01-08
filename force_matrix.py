@@ -154,14 +154,16 @@ class MatrixHandler():
 
         return matrix
 
-    def print_to_pdf(self, matrices: list, color_matrices: list, filename=None, add_borders=False):
+    def print_to_pdf(self, matrices: list, color_matrices: list, filename=None, add_borders=True):
         if filename == None:
             filename = self.pdf_filename
 
         doc = Document()
         doc.packages.append(Package('xcolor', options='table'))
+        doc.packages.append(Package('transparent'))
         doc.append(NoEscape('\setcounter{secnumdepth}{0}'))
         doc.append(NoEscape('\pagenumbering{gobble}'))
+        # doc.append(NoEscape('\setlength{\arrayrulewidth}{1pt}'))
         # define colors from color dict
         colors = ColorMatrix()
         for color in colors.strDict:
@@ -171,8 +173,11 @@ class MatrixHandler():
 
 
         today = date.today()
-        with doc.create(Section('Randomly generated numbers collected on ' + str(today) + ' and adapted from:')):
-            doc.append('https://onlinemathtools.com/generate-random-matrix')
+        with doc.create(Section(NoEscape('\\fontsize{20pt}{15pt}\selectfont' + ' Randomly generated numbers collected on ' + str(today) + ' and adapted from:'))):
+            doc.append(NoEscape('\\fontsize{14pt}{12pt}\selectfont' + ' https://onlinemathtools.com/generate-random-matrix'))
+
+        with doc.create(Section(NoEscape('\\fontsize{20pt}{15pt}\selectfont' + ' Zoom color palet shuffled with and adapted from:'))):
+            doc.append(NoEscape('\\fontsize{14pt}{12pt}\selectfont' + ' https://onlinerandomtools.com/shuffle-words'))
             doc.append(NoEscape("\\newpage"))
             
         for i in range(len(matrices)):
@@ -180,13 +185,13 @@ class MatrixHandler():
             C = color_matrices[i]
             # set the specs for the table that holds the matrix entries
             if add_borders:
-                table_spec = "|" + "|".join(['c' for t in M[0]]) + "|"
+                border = '|'
             else:
-                table_spec = "".join(['c' for t in M[0]])
+                border = ''
             
             with doc.create(Subsection('Option #' + str(i+1))):
                 ############ create number table
-                with doc.create(Tabular(table_spec)) as table:
+                with doc.create(Tabular(border + border.join(['c' for t in M[0]]) + border)) as table:
                     if add_borders:
                         table.add_hline()
                     for row in M:
@@ -203,14 +208,20 @@ class MatrixHandler():
 
                 doc.append(NoEscape("\hfill"))
                 ############ create color table
-                with doc.create(Tabular("".join(['c' for t in C[0]]))) as table:
-                    # if add_borders:
-                    #     table.add_hline()
+                # fin correct table width
+                if (M < 0).any():
+                    spacer = '24'
+                else:
+                    spacer = '10'
+                    
+                with doc.create(Tabular(border + "".join(['m{' + spacer + 'px}' for t in C[0]]) + border)) as table:
+                    if add_borders:
+                        table.add_hline()
                     for row in C:
                         table.add_row([ NoEscape('\cellcolor{'+ color + '}') for color in row])
-                        # if add_borders:
-                        #     table.add_hline()
 
+                    if add_borders:
+                        table.add_hline()
 
         
         doc.generate_pdf(filename, clean_tex=False)
