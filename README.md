@@ -4,7 +4,7 @@ Using number theory and brute force computation, this project is used to aid a p
 ## Installation
 <!-- From the "executables" folder of this repository, download the file cooresponding to your operating system.<br>
 The executable requires [Latex](https://www.latex-project.org/get/) to be installed on your system. -->
-Install the numpy and pylatex Python libraries before cloning or downloading this repository.<br>
+Install the numpy and pylatex [Python libraries](https://docs.python.org/3/installing/index.html) before [cloning](https://docs.github.com/en/github/creating-cloning-and-archiving-repositories/cloning-a-repository) or downloading this repository.<br>
 The script requires [Latex](https://www.latex-project.org/get/) to be installed on your system.<br>
 The project was developed in Python3.9 and may not work properly in other versions of Python.
 
