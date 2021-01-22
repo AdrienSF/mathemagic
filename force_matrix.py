@@ -163,7 +163,7 @@ class MatrixHandler():
         doc.packages.append(Package('transparent'))
         doc.append(NoEscape('\setcounter{secnumdepth}{0}'))
         doc.append(NoEscape('\pagenumbering{gobble}'))
-        # doc.append(NoEscape('\setlength{\arrayrulewidth}{1pt}'))
+        doc.append(NoEscape('\setlength{\\arrayrulewidth}{1pt}'))
         # define colors from color dict
         colors = ColorMatrix()
         for color in colors.strDict:
@@ -173,11 +173,11 @@ class MatrixHandler():
 
 
         today = date.today()
-        with doc.create(Section(NoEscape('\\fontsize{20pt}{15pt}\selectfont' + ' Randomly generated numbers collected on ' + str(today) + ' and adapted from:'))):
-            doc.append(NoEscape('\\fontsize{14pt}{12pt}\selectfont' + ' https://onlinemathtools.com/generate-random-matrix'))
+        with doc.create(Section(NoEscape('{\\fontsize{20pt}{15pt}\selectfont' + ' Randomly generated numbers collected on ' + str(today) + ' and adapted from:}'))):
+            doc.append(NoEscape('{\\fontsize{14pt}{12pt}\selectfont' + ' https://onlinemathtools.com/generate-random-matrix}'))
 
-        with doc.create(Section(NoEscape('\\fontsize{20pt}{15pt}\selectfont' + ' Zoom color palet shuffled with and adapted from:'))):
-            doc.append(NoEscape('\\fontsize{14pt}{12pt}\selectfont' + ' https://onlinerandomtools.com/shuffle-words'))
+        with doc.create(Section(NoEscape('{\\fontsize{20pt}{15pt}\selectfont' + ' Zoom color palette shuffled with and adapted from:}'))):
+            doc.append(NoEscape('{\\fontsize{14pt}{12pt}\selectfont' + ' https://onlinerandomtools.com/shuffle-words}'))
             doc.append(NoEscape("\\newpage"))
             
         for i in range(len(matrices)):
@@ -214,14 +214,14 @@ class MatrixHandler():
                 else:
                     spacer = '10'
                     
-                with doc.create(Tabular(border + "".join(['m{' + spacer + 'px}' for t in C[0]]) + border)) as table:
+                with doc.create(Tabular(border + border.join(['m{' + spacer + 'px}' for t in C[0]]) + border)) as table:
                     if add_borders:
                         table.add_hline()
                     for row in C:
                         table.add_row([ NoEscape('\cellcolor{'+ color + '}') for color in row])
+                        if add_borders:
+                            table.add_hline()
 
-                    if add_borders:
-                        table.add_hline()
 
         
         doc.generate_pdf(filename, clean_tex=False)

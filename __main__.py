@@ -54,7 +54,7 @@ performer = Performer(revealed_num, choices)
 
 
 # first round -------------------------------
-revealed_digits = input("enter revealed digits (no sapaces): ")
+revealed_digits = input("enter revealed digits (no spaces): ")
 digits = performer.get_digits(revealed_digits)
 print("digits: " + str(digits))
 possibilities1 = performer.get_possibilities(digits)
@@ -72,7 +72,7 @@ else:
     print(performer.filtered_choices(possibilities1)) # generate list of choices that lead to 1 possibility
     print()
     choice = int(input("enter participant's choice: "))
-    revealed_digits = input("enter revealed digits (no sapaces): ")
+    revealed_digits = input("enter revealed digits (no spaces): ")
     digits = performer.get_digits(revealed_digits)
     print("digits: " + str(digits))
     possibilities2 = performer.get_possibilities(digits, choice*revealed_num)
