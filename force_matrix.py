@@ -161,6 +161,7 @@ class MatrixHandler():
         doc = Document()
         doc.packages.append(Package('xcolor', options='table'))
         doc.packages.append(Package('transparent'))
+        doc.packages.append(Package('geometry', options='margin=0.5in'))
         doc.append(NoEscape('\setcounter{secnumdepth}{0}'))
         doc.append(NoEscape('\pagenumbering{gobble}'))
         doc.append(NoEscape('\setlength{\\arrayrulewidth}{1pt}'))
