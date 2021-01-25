@@ -4,6 +4,7 @@ import numpy as np
 import json
 import webbrowser
 from color_matrix import ColorMatrix
+import random
 
 # the script assumes that the participant never chooses a zero as the digit of the product to keep secret.
 
@@ -31,10 +32,24 @@ all_matrices = positive_interior + integer_interior + positive_exterior + intege
 color_handler = ColorMatrix()
 color_matrices = [ color_handler.get_color_matrix(len(M), len(M[0])) for M in all_matrices ]
 
-# shuffle all matrices
+# scramble all matrices
 for i in range(len(all_matrices)):
     all_matrices[i] = dummy.get_altered_matrix(dummy.get_shuffled_matrix(all_matrices[i], constrain_digits=False), np.amax(all_matrices[i]), constrain_digits=False)
-dummy.print_to_pdf(all_matrices, color_matrices)
+# duplicate to 99 options
+i = 0
+duped_mats = []
+duped_colors = []
+while len(duped_mats) < 99:
+    i += 1
+    duped_mats.append(all_matrices[i % len(all_matrices)])
+    duped_colors.append(color_matrices[i % len(all_matrices)])
+
+rand_order = list(range(99))
+random.shuffle(rand_order)
+duped_mats[:] = [ duped_mats[i] for i in rand_order]
+duped_colors[:] = [ duped_colors[i] for i in rand_order]
+
+dummy.print_to_pdf(duped_mats, duped_colors)
 
 # performer input -------------------------------
 email_address = input('enter participant email address: ')
@@ -109,17 +124,32 @@ for n in [4, 5, 6]:
 
 all_matrices = positive_interior + integer_interior + positive_exterior + integer_exterior
 
-print("printing the following to " + handler.pdf_filename + '.pdf : ')
-for M in all_matrices:
-    print(M)
+# print("printing the following to " + handler.pdf_filename + '.pdf : ')
+# for M in all_matrices:
+#     print(M)
+
+
+# duplicate to 99 options
+i = 0
+duped_mats = []
+duped_colors = []
+while len(duped_mats) < 99:
+    i += 1
+    duped_mats.append(all_matrices[i % len(all_matrices)])
+    duped_colors.append(color_matrices[i % len(all_matrices)])
+
+rand_order = list(range(99))
+random.shuffle(rand_order)
+duped_mats[:] = [ duped_mats[i] for i in rand_order]
+duped_colors[:] = [ duped_colors[i] for i in rand_order]
 
 
 # generate pdf
-handler.print_to_pdf(all_matrices, color_matrices)
+handler.print_to_pdf(duped_mats, duped_colors)
 
 # get participant choices
 matrix_num = int(input('enter chosen matrix: ')) - 1
-chosen_matrix = all_matrices[matrix_num]
+chosen_matrix = duped_mats[matrix_num]
 
 
 # ###### too verbose:
@@ -147,16 +177,19 @@ pseudo_matrix = handler.get_altered_matrix(handler.get_shuffled_matrix(chosen_ma
 
 
 # shuffle all matrices
-for i in range(len(all_matrices)):
-    all_matrices[i] = handler.get_altered_matrix(handler.get_shuffled_matrix(all_matrices[i], constrain_digits=False), np.amax(all_matrices[i]), constrain_digits=False)
+for i in range(len(duped_mats)):
+    duped_mats[i] = handler.get_altered_matrix(handler.get_shuffled_matrix(duped_mats[i], constrain_digits=False), np.amax(duped_mats[i]), constrain_digits=False)
 
 # replace the chosen matrix with a specially shuffled matrix
-all_matrices[matrix_num] = pseudo_matrix
+duped_mats[matrix_num] = pseudo_matrix
 # replace it's cooresponing color matrix with a octored one
-color_matrices[matrix_num] = color_handler.get_doctored_matrix(color_matrices[matrix_num], coord_dict)
+duped_colors[matrix_num] = color_handler.get_doctored_matrix(duped_colors[matrix_num], coord_dict)
+
+# set the option whose number is the secret number to the same matrix as the chosen matrix
+duped_mats[f-1] = pseudo_matrix
 
 input('press enter to swap matrices in ' + handler.pdf_filename + '.pdf: ')
-handler.print_to_pdf(all_matrices, color_matrices)
+handler.print_to_pdf(duped_mats, duped_colors)
 
 
 

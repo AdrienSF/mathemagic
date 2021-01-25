@@ -161,7 +161,7 @@ class MatrixHandler():
         doc = Document()
         doc.packages.append(Package('xcolor', options='table'))
         doc.packages.append(Package('transparent'))
-        doc.packages.append(Package('geometry', options='margin=0.5in'))
+        # doc.packages.append(Package('geometry', options='margin=0.5in'))
         doc.append(NoEscape('\setcounter{secnumdepth}{0}'))
         doc.append(NoEscape('\pagenumbering{gobble}'))
         doc.append(NoEscape('\setlength{\\arrayrulewidth}{1pt}'))
@@ -207,11 +207,18 @@ class MatrixHandler():
                         if add_borders:
                             table.add_hline()
 
-                doc.append(NoEscape("\hfill"))
+                # doc.append(NoEscape("\hfill")) # same line right side
+                doc.append(NoEscape("\\break")) # new line
+                doc.append(NoEscape("\\vspace{1cm}")) # new line
+                # doc.append('.') # new line
+                doc.append(NoEscape("\\break")) # new line
                 ############ create color table
                 # fin correct table width
                 if (M < 0).any():
-                    spacer = '24'
+                    if (M > 1000).any():
+                        spacer = '23.2'
+                    else:
+                        spacer = '23.1'
                 else:
                     spacer = '10'
                     
@@ -262,14 +269,14 @@ class MatrixHandler():
             color_handler = ColorMatrix()
             color_choices = np.transpose(np.array([ list(color_handler.strDict.keys()) for i in matrix ]))
             # convert ndarray to vanilla python
-            color_choices = [ [item for item in row] for row in color_choices ]
+            color_choices = [ [item for item in row] for row in color_choices ] #just one line
             writer.writerows(color_choices)
 
 
         print('generated \'select_entries.csv\'')
-        print('add a \'*\' to the number entries of \'select_entries.csv\' that should remain invariant')
+        print('add a \'x\' to the number entries of \'select_entries.csv\' that should remain invariant')
         print('some entries have already been marked as invariant with brackets: []')
-        print('add a \'*\' to the color entries to select the color of the invariant entry of a given column')
+        print('add a \'x\' to the color entries to select the color of the invariant entry of a given column')
         input('press enter to save invariant entries and their colors: ')
 
         fixed_entries = []
@@ -284,15 +291,23 @@ class MatrixHandler():
             # collect selected number entries
             for i in range(len(rows[0])):
                 for j in range(len(rows[0])):
-                    if '*' in rows[i][j]:
+                    if 'x' in rows[i][j]:
                         chosen_entries.append((i, j))
-                    if '*' in rows[i][j] or '[' in rows[i][j]:
+                    if 'x' in rows[i][j] or '[' in rows[i][j]:
                         fixed_entries.append((i, j))
+
+            # sanity check
+            if len(chosen_entries) != len(matrix):
+                print('the matrix is of size ' + str(len(matrix)) + ' but ' + str(len(chosen_entries)) + ' entries were selected')
+                print('retrying selection: ')
+                print()
+                return self.get_fixed_entries(np.array(matrix))
+                
             # collect selected color entries
             coord_dict = {}
             for i in range(len(rows[0]), len(rows)):
                 for j in range(len(rows[0])):
-                    if '*' in rows[i][j]:
+                    if 'x' in rows[i][j]:
                         color = list(color_handler.strDict.keys())[i-len(rows[0])]
                         matching_coords = [ coords for coords in chosen_entries if coords[1] == j ]
                         if len(matching_coords) > 1:
