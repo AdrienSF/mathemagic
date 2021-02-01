@@ -1,11 +1,4 @@
 from secret_number import Performer
-from force_matrix import MatrixHandler
-import numpy as np
-import json
-import webbrowser
-from color_matrix import ColorMatrix
-import random
-import math
 
 # ask the performer to select their number from a list of good options
 top_choices = [10161, 15678, 16101, 16839, 17172, 18531, 19611, 20205, 5202, 4041, 729, 63]

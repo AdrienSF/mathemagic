@@ -8,13 +8,12 @@ class Performer():
 
     # given all but one non-zero digit, find the last digit and return all the digits
     def get_digits(self, revealed_digits: str):
-
-        revealed_digits_list = sorted([ int(d) for d in revealed_digits], reverse=True)
-        last_digits_sum = 9 - (sum(revealed_digits_list) % 9)
-        if last_digits_sum == 9:
+        revealed_digits = sorted([ int(d) for d in revealed_digits], reverse=True)
+        last_digit = 9 - (sum(revealed_digits) % 9)
+        if last_digit == 9:
             print('warning: hidden digit could be 0 OR 9. Continuing with the assumption that it is 9')
+        digits = int("".join([str(last_digit)] + [str(d) for d in revealed_digits]))
 
-        digits = int("".join([str(last_digits_sum)] + revealed_digits_list))
         return digits
 
 
