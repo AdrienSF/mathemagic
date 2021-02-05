@@ -21,7 +21,7 @@ def get_possibilities(revealed_num: int, revealed_digits: list, total_digits: in
 
 
 
-mult_9s = [ 9*i for i in range(2,111)]#12) ]
+mult_9s = [ 9*i for i in range(2,11112) ]
 secret_nums = range(10,100)
 
 results = []
