@@ -51,8 +51,6 @@ duped_colors[:] = [ duped_colors[i] for i in rand_order]
 
 dummy.print_to_pdf(duped_mats, duped_colors)
 
-# performer input -------------------------------
-email_address = input('enter participant email address: ')
 
 # ask the performer to select their number from a list of good options
 top_choices = [10161, 15678, 16101, 16839, 17172, 18531, 19611, 20205, 5202, 4041, 729, 63]
@@ -191,9 +189,3 @@ duped_mats[f-1] = pseudo_matrix
 input('press enter to swap matrices in ' + handler.pdf_filename + '.pdf: ')
 handler.print_to_pdf(duped_mats, duped_colors)
 
-
-
-# generate email
-link = 'mailto:' + email_address + '?subject=Here\'s the pdf with the random numbers'
-print(link)
-# webbrowser.open(link)
