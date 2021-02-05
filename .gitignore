@@ -6,3 +6,5 @@ env
 dist
 build
 *.spec
+*.log
+*.aux

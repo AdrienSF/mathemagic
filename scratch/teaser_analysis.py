@@ -4,8 +4,7 @@ import math
 import statistics as stat
 import csv
 
-def get_possibilities(revealed_num: int, revealed_digits: list, total_digits: int):
-    perf = Performer(revealed_num, list(range(20)))
+def get_possibilities(revealed_num: int, revealed_digits: list, total_digits: int, perf):
 
     # get possible digits
     possible_digits = perf.get_pos_digits(revealed_digits, total_digits)
@@ -22,18 +21,19 @@ def get_possibilities(revealed_num: int, revealed_digits: list, total_digits: in
 
 
 
-mult_9s = [ 9*i for i in range(2,11112) ]
+mult_9s = [ 9*i for i in range(2,111)]#12) ]
 secret_nums = range(10,100)
 
 results = []
 for mult in mult_9s:
     print((mult/9)/11112)
+    perf = Performer(mult, list(range(20)))
     total_pos = []
     for num in secret_nums:
         product = num*mult
         product_digits = [ int(d) for d in str(product) ]
         for revealed_digits in itertools.combinations(product_digits, math.ceil(len(product_digits)/2)):
-            possibilities = get_possibilities(mult, list(revealed_digits), len(product_digits))
+            possibilities = get_possibilities(mult, list(revealed_digits), len(product_digits), perf)
             total_pos.append(len(possibilities))
 
     results.append([mult, max(total_pos), stat.median(total_pos), stat.mean(total_pos), stat.stdev(total_pos)])
