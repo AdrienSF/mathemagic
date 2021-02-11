@@ -28,7 +28,7 @@ The program will display a list of choices to give to the participant, and ask f
 
 ### Matrix Section
 The program generates a file named "matrices.pdf" containing a number of different forcing matrices, and asks you which one the participant chose. Once this is entered, "select_entries.csv" will be generated. 
-Open this file as a spreadsheet to see a list of colors (as well as the previously selected matrix). Put coordinates (comma seperated) in the color cell to select a color and a matrix entry all at once (ex: 'white1,2' in the first cell)
+Open this file as a spreadsheet to see a list of colors (as well as the previously selected matrix). Put coordinates (period seperated) in the color cell (or the cell directly below it) to select a color and a matrix entry all at once (ex: 'white1.2' in the first cell)
 When you are done marking invariant entries and color names, save the spreadsheet and press enter in the terminal prompt. You will then be asked if the participant's forcing matrix should be swapped. Press enter at the command line prompt to scramble the forcing matrix and doctor the color grid. A mailto link will also be printed, if an email address was entered you can open this link in a browser to quickly and easily open and edit a draft email.
 
 ## Analysis

@@ -20,6 +20,23 @@ class ColorMatrix(object):
                     'dark_green': [3/255, 98/255, 40/255],
                     'dark_blue': [12/255, 80/255, 203/255]
                     }
+
+        self.code_dict = {'white': '',
+                    'black': [0,0,0],
+                    'red': [255/255, 46/255, 21/255],
+                    'yellow': [254/255, 215/255, 43/255],
+                    'turquoise': [122/255, 187/255, 129/255],
+                    'blue': [36/255, 135/255, 255/255],
+                    'purple': [183/255, 133/255, 254/255],
+                    'pink': [255/255, 83/255, 201/255],
+                    'orange': [254/255, 141/255, 0/255],
+                    'green': [65/255, 192/255, 27/255],
+                    'light_blue': [70/255, 205/255, 237/255],
+                    'rust': [139/255, 13/255, 0/255],
+                    'brown': [124/255, 70/255, 5/255],
+                    'dark_green': [3/255, 98/255, 40/255],
+                    'dark_blue': [12/255, 80/255, 203/255]
+                    }
         
         self.strDict = self.get_strDict()
 
@@ -60,3 +77,4 @@ class ColorMatrix(object):
             matrix[coords] = color 
 
         return matrix
+

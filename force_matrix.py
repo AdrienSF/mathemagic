@@ -279,7 +279,7 @@ class MatrixHandler():
         print('generated \'select_entries.csv\'')
         # print('add a \'x\' to the number entries of \'select_entries.csv\' that should remain invariant')
         # print('some entries have already been marked as invariant with brackets: []')
-        print('add coordinates (comma seperated) to the color entries to select the color of the invariant entry said coordinates (ex: white1,2')
+        print('add coordinates (period seperated) to the color entries to select the color of the invariant entry said coordinates (ex: white1.2')
         input('press enter to save invariant entries and their colors: ')
 
         # fixed_entries = []
@@ -320,10 +320,10 @@ class MatrixHandler():
             #             coord_dict[coords] = color
             color_row = rows[-1]
             # turn color row into list of coords
-            coord_list = [ item for item in color_row if ',' in item ] # get entries that have commas
-            coord_list = [ [d for d in item if d.isdigit() or d == ','] for item in coord_list ] # extract only the numbers and commas from the entry
+            coord_list = [ item for item in color_row if '.' in item ] # get entries that have .
+            coord_list = [ [d for d in item if d.isdigit() or d == '.'] for item in coord_list ] # extract only the numbers and . from the entry
             coord_list = [ "".join(item) for item in coord_list ] # join the coords into a single string
-            coord_list = [ item.split(',') for item in coord_list ] # split the string around the comma
+            coord_list = [ item.split('.') for item in coord_list ] # split the string around the .
             coord_list = [ [int(n)-1 for n in item] for item in coord_list ] # convert to int and subtract 1 to get 0 indexed column and row numbers
             coord_list = [ tuple(item) for item in coord_list ] # turn the coordinate list of list into list of tuples
             # sanity check
@@ -337,7 +337,26 @@ class MatrixHandler():
             color_names = list(color_handler.strDict.keys())
             coord_dict = { coord_list[i]: color_names[i] for i in range(len(coord_list))}
 
+            # confirm correctness of entered info
+            # OKGREEN = '\033[92m'
+            # ENDC = '\033[0m'
+            # colored_mat = matrix
+            # for coords in coord_dict:
+                # chosen = ', ' + str(matrix[coords[0]][coords[1]]) + ', '
+                # start = str(matrix[coords[0]][:coords[1]]).replace('[', '').replace(']', '')
+                # end = str(matrix[coords[0]][(coords[1]+1):]).replace('[', '').replace(']','')
+                # colored_mat[coords[0]] = f'{start}{color_handler.code_dict[coord_dict[coords]]}{chosen}{ENDC}{end}'
+            
+            colored_mat = list(matrix)
+            for coords in coord_dict:
+                colored_mat[coords[0]][coords[1]] = [colored_mat[coords[0]][coords[1]]]
 
-        
+            for row in colored_mat:
+                print(row)
+
+            if input('Press enter if this is correct. Enter \'n\' to restart selection: '):
+                return self.get_fixed_entries(np.array(input_matrix))
+            
+
         return list(coord_dict.keys()), coord_dict
             
