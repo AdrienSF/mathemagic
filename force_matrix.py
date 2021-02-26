@@ -333,9 +333,11 @@ class MatrixHandler():
                 print()
                 return self.get_fixed_entries(np.array(input_matrix))
 
+            # get indexes of entries that have '.'
+            color_indexes = tuple( i for i in range(len(color_row)) if '.' in color_row[i] )
             # turn list of coords into a color dict of coords
             color_names = list(color_handler.strDict.keys())
-            coord_dict = { coord_list[i]: color_names[i] for i in range(len(coord_list))}
+            coord_dict = { coord_list[i]: color_names[color_indexes[i]] for i in range(len(coord_list))}
 
             # confirm correctness of entered info
             # OKGREEN = '\033[92m'
