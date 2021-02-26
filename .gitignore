@@ -8,4 +8,3 @@ build
 *.spec
 *.log
 *.aux
-date_analysis.*
