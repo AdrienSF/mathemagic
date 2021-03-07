@@ -8,7 +8,7 @@ import random
 
 
 # first premise: we know all digits in any order
-# brute force with divisibility and date constraints
+
 
 
 # date and divisibility constraints
@@ -52,7 +52,7 @@ def yield_filtered_pos(prodstr, perf_num):
     for pos in set(permutations(prodstr)):
         # print('permutation to str')
         strpos = ''.join(pos)
-        print(strpos)
+        # print(strpos)
         # print('checking if permutation is valid')
         if is_valid(strpos, perf_num):
             # print('yielding possibility: ' + str(int(strpos)/perf_num))
@@ -84,7 +84,7 @@ def pos_dates(date):
         date += timedelta(days=1)
 
 
-for perf_num in range(10, 100):
+for perf_num in range(1000, 10000):
     for date in pos_dates(datetime(1998, 1, 1)):
         date_int = int(date.strftime("%m") + date.strftime("%d"))
 
@@ -93,16 +93,16 @@ for perf_num in range(10, 100):
         res  = len(get_filtered_pos(prodstr, perf_num))
         # print(str([ perf_num, date_int, res ]))
         # check if there are more than 30 possibilities. if so skip this perf num
-        if res > 100:
-            print(str(perf_num) + ': trying nex perf num')
-            break
+        # if res > 100:
+        #     print(str(perf_num) + ': trying nex perf num')
+        #     break
 
-        if date >= datetime(1998, 12, 31):
-            print('succes!-----------------------------------------')
-            print(str([ perf_num, date_int, res ]))
+        # if date >= datetime(1998, 12, 31):
+        #     print('succes!-----------------------------------------')
+        #     print(str([ perf_num, date_int, res ]))
 
         # # print('writing possibilities...')
-        with open('possibillity_counts.csv', 'a', newline='') as csvfile:
+        with open('4digit_possibillity_counts.csv', 'a', newline='') as csvfile:
             writer = csv.writer(csvfile, delimiter=',',
                             quotechar='"', quoting=csv.QUOTE_MINIMAL)
 
