@@ -70,10 +70,11 @@ perf_num = top_choices[int(input('enter choice num: '))-1]
 
 digits = input('enter product digits (no spaces): ')
 res = get_filtered_pos(digits, perf_num)
-if len(res) != 1:
-    print('[WARNING]: found multiple possibilities:')
-    print(res)
-    exit(0)
+# if len(res) != 1:
+#     print('[WARNING]: found multiple possibilities:')
+#     print(res)
+#     exit(0)
 
-res = res[0]
-print(res.strftime('%b') + ' ' + res.strftime('%d'))
+# res = res[0]
+for d in res:
+    print(d.strftime('%b') + ' ' + d.strftime('%d'))

@@ -12,7 +12,7 @@ def get_possibilities(revealed_num, revealed_digits, total_digits):
     # get possible secret num for every possible set of digits
     possibilities = set([])
     for digits in possible_digits:
-        pos = perf.get_possibilities(int(''.join([str(d) for d in digits])))
+        pos = perf.get_possibilities(''.join([str(d) for d in digits]))
         possibilities = possibilities.union(pos)
 
     # remove 1 digit numbers from the possibilities

@@ -38,7 +38,7 @@ class Performer():
         return to_check
 
     # given the product digits in some order, returns possible secret numbers
-    def get_possibilities(self, digits: int, revealed_num=None, r=100):
+    def get_possibilities(self, digits, revealed_num=None, r=100):
         if not revealed_num:
             revealed_num = self.revealed_num
 
