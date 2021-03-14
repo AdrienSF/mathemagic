@@ -1,7 +1,7 @@
 from itertools import permutations
 from datetime import datetime, timedelta
 import csv
-import random
+import statistics as stats
 
 # given date constraints and choice of a 2 digit number, 
 # how much information do you need about the product to find the date?
@@ -84,13 +84,17 @@ def pos_dates(date):
         date += timedelta(days=1)
 
 
-for perf_num in range(1000, 10000):
+for perf_date in pos_dates(datetime(1998, 1, 1)):
+    perf_num = int(perf_date.strftime("%m") + perf_date.strftime("%d"))
+    res = []
     for date in pos_dates(datetime(1998, 1, 1)):
         date_int = int(date.strftime("%m") + date.strftime("%d"))
 
         prodstr = str(date_int*perf_num)
         # print('getting possibilities...')
-        res  = len(get_filtered_pos(prodstr, perf_num))
+        current = len(get_filtered_pos(prodstr, perf_num))
+        res.append(current)
+        assert current != 0
         # print(str([ perf_num, date_int, res ]))
         # check if there are more than 30 possibilities. if so skip this perf num
         # if res > 100:
@@ -102,10 +106,8 @@ for perf_num in range(1000, 10000):
         #     print(str([ perf_num, date_int, res ]))
 
         # # print('writing possibilities...')
-        with open('4digit_possibillity_counts.csv', 'a', newline='') as csvfile:
-            writer = csv.writer(csvfile, delimiter=',',
-                            quotechar='"', quoting=csv.QUOTE_MINIMAL)
+    with open('4digit_possibillity_counts.csv', 'a', newline='') as csvfile:
+        writer = csv.writer(csvfile, delimiter=',',
+                        quotechar='"', quoting=csv.QUOTE_MINIMAL)
 
-            writer.writerow([ perf_num, date_int, res ])
-
-        assert res != 0
+        writer.writerow([ perf_num, max(res), stats.mean(res), stats.stdev(res) ])
