@@ -68,7 +68,7 @@ is_md_order = input("is the date order month/day? y/n: ") == 'y'
 # ask the performer to select their number from a list of good options
 top_choices = [ 218,  329,  413,  622,  628,  709,  712,  718,  719,
         731,  811,  821,  827,  902,  905,  908,  916,  928,
-       1114, 1205, 1207, 1213, 1216, 1217, 1219, 1228, 1231]
+       1114, 1205, 1207, 1213, 1216, 1217, 1219, 1228, 1231 ]
 
 for i in  range(len(top_choices)):
     print('choice ' + str(i+1) + ': ' + str(top_choices[i]))
@@ -86,3 +86,36 @@ res = get_filtered_pos(digits, perf_num, is_md_order=is_md_order)
 print(res)
 for d in res:
     print(d.strftime('%b') + ' ' + d.strftime('%d'))
+
+
+
+'''
+performer date, percent instances of 2 possibilities
+[[1231.        ,    4.93150685], Psy (whose hit single "Gangnam Style" became a viral video on YouTube)
+[1213.        ,    6.02739726], Taylor Swift
+[1207.        ,    6.02739726], Larry Bird 
+[1217.        ,    6.30136986], Pope Francis
+[1216.        ,    6.30136986], Ludwig van Beethoven
+[ 709.        ,    6.84931507], Tom Hanks 
+[ 413.        ,    6.84931507],
+[ 821.        ,    6.84931507],
+[ 719.        ,    7.39726027],
+[ 916.        ,    7.39726027],
+[1228.        ,    8.21917808],
+[ 827.        ,    8.49315068],
+[1205.        ,    8.49315068],
+[ 329.        ,    8.76712329],
+[ 718.        ,    9.04109589],
+[ 908.        ,    9.04109589],
+[1219.        ,    9.04109589],
+[ 811.        ,    9.31506849],
+[ 622.        ,    9.5890411 ],
+[ 218.        ,   10.4109589 ],
+[ 905.        ,   10.95890411],
+[ 628.        ,   11.23287671],
+[ 712.        ,   11.78082192],
+[1114.        ,   12.32876712],
+[ 928.        ,   12.87671233],
+[ 731.        ,   12.87671233],
+[ 902.        ,   14.24657534]]
+'''
