@@ -66,9 +66,9 @@ is_md_order = input("is the date order month/day? y/n: ") == 'y'
 
 
 # ask the performer to select their number from a list of good options
-top_choices = [ 218,  329,  413,  622,  628,  709,  712,  718,  719,
-        731,  811,  821,  827,  902,  905,  908,  916,  928,
-       1114, 1205, 1207, 1213, 1216, 1217, 1219, 1228, 1231 ]
+top_choices = [1231, 1213, 1207, 1217, 1216, 709, 413, 821, 719, 916, 1228, 827, 
+            1205, 329, 718, 908,1219, 811, 622, 218, 905, 628, 712, 1114, 928, 731, 902]
+
 
 for i in  range(len(top_choices)):
     print('choice ' + str(i+1) + ': ' + str(top_choices[i]))
@@ -86,7 +86,6 @@ res = get_filtered_pos(digits, perf_num, is_md_order=is_md_order)
 print(res)
 for d in res:
     print(d.strftime('%b') + ' ' + d.strftime('%d'))
-
 
 
 '''
