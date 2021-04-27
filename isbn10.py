@@ -110,45 +110,16 @@ def get_pos_entries(altered: str, prime: int):
 
 
 
-# print('this version expects a 10 digit ISBN (last entry cannot be 10 or X)')
-# print('for this version, take any valid isbn10 and add a prime to any entry such that the entry remains a single digit')
+print('For this version, take any valid isbn10 and add a 1 digit prime to any entry')
 
-# altered = [d for d in input('Enter altered ISBN10 (no spaces): ')]
-# prime = int(input('Enter the prime number used: '))
-# all_pos = get_pos_entries(altered, prime)
+altered = [d for d in input('Enter altered ISBN10 (no spaces): ')]
+prime = int(input('Enter the prime number used: '))
+all_pos = get_pos_entries(altered, prime)
 # print(all_pos)
-# # original = correct_altered(pos, prime)
+# original = correct_altered(pos, prime)
 
-# print('the original ISBN could be:')
-# for pos in all_pos:
-#     og = correct_altered(pos, prime)
-#     print(og)
-
-tries = 10000000
-total_fails = 0
-prime = 2
-for _ in range(tries):
-    isbn = get_rand_isbn10(exclude10=False)
-    # print(isbn)
-    isbn[random.choice(range(10))] += prime
-    isbnstr = ''.join([str(e) for e in isbn])
-    all_pos = get_pos_entries(isbnstr, prime)
-    # print(isbn)
-    # print(isbnstr)
-    assert len(all_pos) >= 1
-    pos_originals = [correct_altered(pos, prime) for pos in all_pos]
-    pos_originals = [pos for pos in pos_originals if pos]
-    # assert len(pos_originals) == 1
-    if len(pos_originals) > 1:
-        total_fails += 1
-
-
-print('total fails:', total_fails, "out of", tries)
-print(100 * total_fails/tries, "% observed fail rate")
-
-
-
-# 7: 3.5% fail rate
-# 5: 2 % fail rate
-# 3: 0.5% fail rate
-# 2: 0.17% fail rate
+print('the original ISBN is one of the following:')
+for pos in all_pos:
+    og = correct_altered(pos, prime)
+    if og:
+        print(og)
