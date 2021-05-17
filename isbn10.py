@@ -122,4 +122,9 @@ print('the original ISBN is one of the following:')
 for pos in all_pos:
     og = correct_altered(pos, prime)
     if og:
+        print(''.join(og))
         print(og)
+        print('open this link to look up the cooresponding book:')
+        if og[-1] == '10':
+            og[-1] = 'x'
+        print('https://isbnsearch.org/isbn/' + ''.join(og))
