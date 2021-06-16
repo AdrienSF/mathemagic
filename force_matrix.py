@@ -67,9 +67,9 @@ class MatrixHandler():
         return np.array([ [col_seed + row_seed for col_seed in col_seeds] for row_seed in row_seeds ])
 
     # returns a matrix that contains the seeds, and a 0. 
-    # Where these seeds are positioned in the matrix is chosen randomly
+    # Where these seeds are positioned in the matrix is chosen randomly if rand_order, else middle
     # requires 2 fewer seeds than for exterior matrices
-    def get_interior_matrix(self, seeds: list, n: int):
+    def get_interior_matrix(self, seeds: list, n: int, rand_order=True):
         if len(seeds) != 2*(n-1):
             print("get_interior_matrix expected 2*(n-1) seeds but got: " + str(len(seeds)) + " with n=" + str(n))
             raise TypeError()
@@ -77,8 +77,14 @@ class MatrixHandler():
         col_seeds = list(seeds[0:n])
         row_seeds = list(seeds[n:2*n])
         
-        seed_col = random.choice(range(n))
-        seed_row = random.choice(range(n))
+        if rand_order:
+            seed_col = random.choice(range(n))
+            seed_row = random.choice(range(n))
+        else:
+            seed_col = int(n/2 + 1)
+            seed_row = int(n/2 + 1)
+
+
         
         col_seeds.insert(seed_row, 0)
         row_seeds.insert(seed_col, 0)
